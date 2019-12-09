@@ -1,0 +1,17 @@
+#/docker-compose.override.yaml
+#/docker-compose.override.yml
+
+.idea/
+.idea/*
+*/.idea/
+*/.idea/*
+
+blackfire-variables.env
+
+/.env
+/docker-compose.override.yaml
+/docker-compose.override.yml
+/docker/letsencrypt/data
+/docker/letsencrypt/domains.conf
+/docker/nginx-proxy/certs
+/docker/nginx-proxy/vhost.d
