@@ -19,7 +19,7 @@ services:
             - 8080:8080
 
     php:
-        build: 
+        build:
             context: ./app
             target: app_php
         ports:
@@ -27,7 +27,7 @@ services:
         volumes:
             - ./app:/srv/app:rw,cached
             - ./app/docker/php/conf.d/app.dev.ini/:/usr/local/etc/php/conf.d/app.ini
-        depends_on: 
+        depends_on:
             - db
 
     nginx:
@@ -36,7 +36,7 @@ services:
             target: app_nginx
         ports:
             - 80:80
-        depends_on: 
+        depends_on:
             - php
         volumes:
 #            - ./app/public:/srv/app/public:ro

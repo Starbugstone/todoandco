@@ -4,7 +4,7 @@
 
 
 # https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
-ARG PHP_VERSION=7.3
+ARG PHP_VERSION=7.2
 ARG NGINX_VERSION=1.17
 
 
@@ -82,14 +82,16 @@ ARG APP_ENV=prod
 #COPY composer.json composer.lock symfony.lock ./
 COPY composer.json composer.lock ./
 
+COPY app app/
+
 RUN set -eux; \
-	composer install --prefer-dist --no-dev --no-scripts --no-progress --no-suggest; \
+    composer install --prefer-dist --no-dev --no-scripts --no-progress --no-suggest; \
 	composer clear-cache
 
 # do not use .env files in production
-COPY .env ./
-RUN composer dump-env prod; \
-	rm .env
+#COPY .env ./
+#RUN composer dump-env prod; \
+#	rm .env
 
 # copy only specifically what we need
 COPY bin bin/
@@ -98,14 +100,15 @@ COPY bin bin/
 COPY src src/
 
 #adding extra folders for old version of symfony
-COPY app app/
+#COPY app app/
 COPY web web/
 
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
-	composer dump-autoload --classmap-authoritative --no-dev; \
-	composer run-script --no-dev post-install-cmd; \
-	chmod +x bin/console; sync
+	composer dump-autoload --classmap-authoritative --no-dev;
+#RUN	composer run-script --no-dev post-install-cmd;
+RUN	chmod +x bin/console; sync
+
 VOLUME /srv/app/var
 
 COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
