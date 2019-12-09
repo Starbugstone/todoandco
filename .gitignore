@@ -6,7 +6,7 @@
 */.idea/
 */.idea/*
 
-blackfire-variables.env
+/blackfire-variables.env
 
 /.env
 /docker-compose.override.yaml

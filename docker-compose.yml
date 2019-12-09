@@ -42,8 +42,9 @@ services:
 #            - ./app/public:/srv/app/public:ro
             - ./app/web:/srv/app/web:ro
 
-#    blackfire:
-#        image: blackfire/blackfire
-#        environment:
-#            - BLACKFIRE_SERVER_ID
-#            - BLACKFIRE_SERVER_TOKEN
+    blackfire:
+        image: blackfire/blackfire
+        env_file:
+            - blackfire-variables.env
+        ports:
+            - 8707:8707
