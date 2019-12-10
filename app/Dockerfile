@@ -4,7 +4,7 @@
 
 
 # https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
-ARG PHP_VERSION=7.2
+ARG PHP_VERSION=7.3
 ARG NGINX_VERSION=1.17
 
 
@@ -79,29 +79,28 @@ WORKDIR /srv/app
 ARG APP_ENV=prod
 
 # prevent the reinstallation of vendors at every changes in the source code
-#COPY composer.json composer.lock symfony.lock ./
-COPY composer.json composer.lock ./
+COPY composer.json composer.lock symfony.lock ./
 
-COPY app app/
+#COPY app app/
 
 RUN set -eux; \
     composer install --prefer-dist --no-dev --no-scripts --no-progress --no-suggest; \
 	composer clear-cache
 
 # do not use .env files in production
-#COPY .env ./
-#RUN composer dump-env prod; \
-#	rm .env
+COPY .env ./
+RUN composer dump-env prod; \
+	rm .env
 
 # copy only specifically what we need
 COPY bin bin/
-#COPY config config/
-#COPY public public/
+COPY config config/
+COPY public public/
 COPY src src/
 
 #adding extra folders for old version of symfony
 #COPY app app/
-COPY web web/
+#COPY web web/
 
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
@@ -135,9 +134,6 @@ FROM nginx:${NGINX_VERSION}-alpine AS app_nginx
 
 COPY docker/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
 
-#WORKDIR /srv/app/public
-#
-#COPY --from=app_php /srv/app/public ./
-WORKDIR /srv/app/web
+WORKDIR /srv/app/public
 
-COPY --from=app_php /srv/app/web ./
+COPY --from=app_php /srv/app/public ./
