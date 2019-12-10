@@ -21,12 +21,12 @@ class UserController extends AbstractController
     /**
      * @var UserRepository
      */
-    private $repository;
+    private $userRepository;
 
-    public function __construct(UserPasswordEncoderInterface $encoder, UserRepository $repository)
+    public function __construct(UserPasswordEncoderInterface $encoder, UserRepository $userRepository)
     {
         $this->encoder = $encoder;
-        $this->repository = $repository;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -34,7 +34,7 @@ class UserController extends AbstractController
      */
     public function listAction(): Response
     {
-        return $this->render('user/list.html.twig', ['users' => $this->repository->findAll()]);
+        return $this->render('user/list.html.twig', ['users' => $this->userRepository->findAll()]);
     }
 
     /**
