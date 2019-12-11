@@ -20,7 +20,7 @@ services:
             - 9000:9000
         volumes:
             - ./app:/srv/app:rw,cached
-            - ./app/docker/php/conf.d/app.dev.ini/:/usr/local/etc/php/conf.d/app.ini
+            - ./app/docker/php/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.ini
         depends_on:
             - db
 
