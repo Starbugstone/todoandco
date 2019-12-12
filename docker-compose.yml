@@ -19,27 +19,29 @@ services:
             - 8080:8080
 
     php:
+        image: starbugstone/todoandco-php
         build:
-            context: ./app
+            context: ./
             target: app_php
         ports:
             - 9000:9000
         volumes:
-            - ./app:/srv/app:rw,cached
-            - ./app/docker/php/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.ini
+            - ./:/srv/app:rw,cached
+            - ./docker/php/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.ini
         depends_on:
             - db
 
     nginx:
+        image: starbugstone/todoandco-nginx
         build:
-            context: ./app
+            context: ./
             target: app_nginx
         ports:
             - 80:80
         depends_on:
             - php
         volumes:
-            - ./app/public:/srv/app/public:ro
+            - ./public:/srv/app/public:ro
 
     blackfire:
         image: blackfire/blackfire
