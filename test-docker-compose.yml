@@ -4,6 +4,8 @@ services:
     db:
         image: mysql:8.0
         command: ["--default-authentication-plugin=mysql_native_password"]
+        ports:
+            - 3306:3306
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: symfony
@@ -11,15 +13,22 @@ services:
             MYSQL_PASSWORD: symfony
 
     php:
-        image: starbugstone/todoandco-php
+        image: starbugstone/todoandco-php:develop
         build:
             context: ./
             target: app_php
+        environment:
+            - APP_ENV=test
+        ports:
+            - 9000:9000
+#        volumes:
+#            - ./:/srv/app:rw,cached
+#            - ./docker/php/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.ini
         depends_on:
             - db
 
     nginx:
-        image: starbugstone/todoandco-nginx
+        image: starbugstone/todoandco-nginx:develop
         build:
             context: ./
             target: app_nginx
@@ -27,3 +36,5 @@ services:
             - 80:80
         depends_on:
             - php
+#        volumes:
+#            - ./public:/srv/app/public:ro

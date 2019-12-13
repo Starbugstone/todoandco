@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+    php:
+        image: starbugstone/todoandco-php:develop
+        build:
+            context: ./
+            target: app_php
+        environment:
+            - APP_ENV=test
+
+    nginx:
+        image: starbugstone/todoandco-nginx:develop
+        build:
+            context: ./
+            target: app_nginx
