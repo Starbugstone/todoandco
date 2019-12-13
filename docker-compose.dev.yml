@@ -1,0 +1,42 @@
+version: '3.4'
+
+services:
+    adminer:
+        image: adminer
+        restart: on-failure
+        ports:
+            - 8080:8080
+
+    php:
+        image: starbugstone/todoandco-php:develop
+        build:
+            context: ./
+            target: app_php
+        environment:
+            - APP_ENV=dev
+        ports:
+            - 9000:9000
+        volumes:
+            - ./:/srv/app:rw,cached
+            - ./docker/php/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.ini
+        depends_on:
+            - db
+
+    nginx:
+        image: starbugstone/todoandco-nginx:develop
+        build:
+            context: ./
+            target: app_nginx
+        ports:
+            - 80:80
+        depends_on:
+            - php
+        volumes:
+            - ./public:/srv/app/public:ro
+
+    blackfire:
+        image: blackfire/blackfire
+        env_file:
+            - blackfire-variables.env
+        ports:
+            - 8707:8707
