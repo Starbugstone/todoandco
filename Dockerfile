@@ -98,6 +98,7 @@ COPY bin bin/
 COPY config config/
 COPY public public/
 COPY src src/
+COPY templates templates/
 COPY tests tests/
 
 #adding extra folders for old version of symfony
