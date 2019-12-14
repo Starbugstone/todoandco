@@ -9,7 +9,7 @@ class TaskTest extends TestCase
     {
         $task = new Task();
 
-        // Making sure that we initialise with a valid datetime and not isdone
+        // Making sure that we initialise with a valid datetime and not isDone
         $this->assertTrue($task->getCreatedAt() <= new \Datetime());
         $this->assertFalse($task->getIsDone());
 
@@ -24,8 +24,10 @@ class TaskTest extends TestCase
         $task->setCreatedAt($now);
         $this->assertEquals($now, $task->getCreatedAt());
 
+        //making sure that the custom functions for isdone are working
         $task->setIsDone(true);
         $this->assertTrue($task->getIsDone());
-
+        $this->assertTrue($task->isDone());
+        $this->assertFalse($task->toggleIsDone());
     }
 }

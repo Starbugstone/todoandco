@@ -98,13 +98,14 @@ class Task
         return $this;
     }
 
-    public function isDone()
+    public function isDone(): bool
     {
         return $this->isDone;
     }
 
-    public function toggle($flag)
+    public function toggleIsDone(): bool
     {
-        $this->isDone = $flag;
+        $this->isDone = !$this->isDone;
+        return $this->isDone;
     }
 }
