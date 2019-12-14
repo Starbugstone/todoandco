@@ -13,6 +13,9 @@ class TaskTest extends TestCase
         $this->assertTrue($task->getCreatedAt() <= new \Datetime());
         $this->assertFalse($task->getIsDone());
 
+        //id should be null as it is not saved to DB
+        $this->assertNull($task->getId());
+
         // testing getters and setters
         $task->setTitle('foo');
         $task->setContent('bar');
