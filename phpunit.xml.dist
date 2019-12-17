@@ -26,9 +26,14 @@
             <directory>src</directory>
             <exclude>
                 <directory>src/Migrations</directory>
+                <directory>src/DataFixtures</directory>
             </exclude>
         </whitelist>
     </filter>
+
+    <extensions>
+        <extension class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension"/>
+    </extensions>
 
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
