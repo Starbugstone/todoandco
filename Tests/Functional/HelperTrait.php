@@ -17,7 +17,7 @@ Trait HelperTrait
         /** @var User $user */
         $user = $entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
         if (!$user) {
-            throw new \Exception($username . ' not found in database, did you load the fixtures ?');
+            throw new \Exception($username . ' not found in database, did you load the fixtures or pass a good username?');
         }
         return $user;
     }
@@ -27,14 +27,17 @@ Trait HelperTrait
         /** @var Task $task */
         $task = $entityManager->getRepository(User::class)->findOneBy(['title' => $title]);
         if (!$task) {
-            throw new \Exception($title . ' not found in database, did you load the fixtures ?');
+            throw new \Exception($title . ' not found in database, did you load the fixtures or pass a good title ?');
         }
         return $task;
     }
 
     //login, default to user1
-    public function loginClient(KernelBrowser $client, $username = HelperConstants::TEST_USER, $password = HelperConstants::TEST_PASSWORD): KernelBrowser
-    {
+    public function loginClient(
+        KernelBrowser $client,
+        $username = HelperConstants::TEST_USER,
+        $password = HelperConstants::TEST_PASSWORD
+    ): KernelBrowser {
         $crawler = $client->request('GET', '/login');
 
         //filling out the login form
@@ -44,5 +47,11 @@ Trait HelperTrait
         $crawler = $client->submit($form);
         $client->followRedirect();
         return $client;
+    }
+
+    //login as admin
+    public function loginAdmin(KernelBrowser $client): KernelBrowser
+    {
+        return $this->loginClient($client, HelperConstants::TEST_ADMIN_USER, HelperConstants::TEST_ADMIN_PASSWORD);
     }
 }
