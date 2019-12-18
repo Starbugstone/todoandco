@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 Trait HelperTrait
 {
 
-    public function getUser(EntityManager $entityManager, string $username = 'user1'): User
+    public function getUser(EntityManager $entityManager, string $username = HelperConstants::TEST_USER): User
     {
         /** @var User $user */
         $user = $entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
@@ -22,7 +22,7 @@ Trait HelperTrait
         return $user;
     }
 
-    public function getTask(EntityManager $entityManager, string $title = 'testTask'): Task
+    public function getTask(EntityManager $entityManager, string $title = HelperConstants::TEST_TASK): Task
     {
         /** @var Task $task */
         $task = $entityManager->getRepository(User::class)->findOneBy(['title' => $title]);
@@ -33,7 +33,7 @@ Trait HelperTrait
     }
 
     //login, default to user1
-    public function loginClient(KernelBrowser $client, $username = 'user1', $password = 'password'): KernelBrowser
+    public function loginClient(KernelBrowser $client, $username = HelperConstants::TEST_USER, $password = HelperConstants::TEST_PASSWORD): KernelBrowser
     {
         $crawler = $client->request('GET', '/login');
 

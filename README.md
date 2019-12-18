@@ -18,4 +18,6 @@ Steps taken
  - BLACKFIRE_SERVER_TOKEN=xxx 
 ---------------------
 
- docker-compose exec php bin/phpunit --coverage-html=coverage/
+docker-compose exec php bin/console doctrine:fixtures:load -n
+
+docker-compose exec php bin/phpunit --coverage-html=coverage/

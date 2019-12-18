@@ -2,37 +2,11 @@
 
 namespace App\Tests\Functional;
 
-use App\Entity\User;
-use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class UserUrlTest extends WebTestCase
 {
     use HelperTrait;
-
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
-
-    protected function setUp(): void
-    {
-        $kernel = self::bootKernel();
-
-        $this->entityManager = $kernel->getContainer()
-            ->get('doctrine')
-            ->getManager();
-        self::ensureKernelShutdown(); //close the kernel now we have the entity manager
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        // doing this is recommended to avoid memory leaks
-        $this->entityManager->close();
-        $this->entityManager = null;
-    }
 
     /**
      * Test url's that need auth when not logged in
@@ -69,9 +43,6 @@ class UserUrlTest extends WebTestCase
     {
         $client = static::createClient();
         $client = $this->loginClient($client);
-//
-//        $this->assertTrue($client->getResponse()->isRedirect());
-//        $crawler = $client->followRedirect();
 
         $crawler = $client->request('GET', $url);
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
@@ -86,8 +57,8 @@ class UserUrlTest extends WebTestCase
 
         //filling out the login form
         $form = $crawler->selectButton('Se connecter')->form();
-        $form['username'] = 'user1';
-        $form['password'] = 'password';
+        $form['username'] = HelperConstants::TEST_USER;
+        $form['password'] = HelperConstants::TEST_PASSWORD;
         $crawler = $client->submit($form);
 
 
