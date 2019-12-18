@@ -17,3 +17,5 @@ Steps taken
  - BLACKFIRE_SERVER_ID=xxx
  - BLACKFIRE_SERVER_TOKEN=xxx 
 ---------------------
+
+ docker-compose exec php bin/phpunit --coverage-html=coverage/

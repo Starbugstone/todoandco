@@ -13,6 +13,14 @@ class TaskFixtures extends Fixture
     {
         $faker = Factory::create();
 
+        $task = new Task();
+
+        $task
+            ->setTitle('testTask')
+            ->setContent('test Task Content');
+
+        $manager->persist($task);
+
         for($i=0; $i<10; $i++){
             $task = new Task();
 
