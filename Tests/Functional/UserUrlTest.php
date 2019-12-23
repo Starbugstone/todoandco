@@ -61,9 +61,27 @@ class UserUrlTest extends WebTestCase
         $form['password'] = HelperConstants::TEST_PASSWORD;
         $crawler = $client->submit($form);
 
-
         $this->assertTrue($client->getResponse()->isRedirect('/'));
         $crawler = $client->followRedirect();
+    }
+
+    //test that we redirect to requested page after login
+    public function testLoginRedirectSpecificPage()
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/tasks');
+        $this->assertTrue($client->getResponse()->isRedirect('/login'));
+        $crawler = $client->followRedirect();
+
+        //filling out the login form
+        $form = $crawler->selectButton('Se connecter')->form();
+        $form['username'] = HelperConstants::TEST_USER;
+        $form['password'] = HelperConstants::TEST_PASSWORD;
+        $crawler = $client->submit($form);
+
+        $this->assertTrue($client->getResponse()->isRedirect()); //can't test the redirect directly as we are passed the absolute URL
+        $this->assertStringContainsString('/tasks', $client->getResponse()->headers->get('location'));
+
     }
 
     //test we redirect to home page if logged in
