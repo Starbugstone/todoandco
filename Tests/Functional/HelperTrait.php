@@ -25,7 +25,7 @@ Trait HelperTrait
     public function getTask(EntityManager $entityManager, string $title = HelperConstants::TEST_TASK): Task
     {
         /** @var Task $task */
-        $task = $entityManager->getRepository(User::class)->findOneBy(['title' => $title]);
+        $task = $entityManager->getRepository(Task::class)->findOneBy(['title' => $title]);
         if (!$task) {
             throw new \Exception($title . ' not found in database, did you load the fixtures or pass a good title ?');
         }

@@ -96,6 +96,11 @@ class UserCrudTest extends WebTestCase
 
         $this->assertTrue($client->getResponse()->isRedirect('/users'));
         $crawler = $client->followRedirect();
+
+
+        $user = $this->getUser($this->entityManager, 'goodUser');
+        $this->assertNotNull($user);
+        $this->assertEquals('mail@localhost.com', $user->getEmail());
     }
 
     //login as admin and edit a username
@@ -118,17 +123,10 @@ class UserCrudTest extends WebTestCase
         $form = $this->userForm($crawler, 'Modifier','editedUser', 'pass', 'pass', 'user1@localhost.com');
         $crawler = $client->submit($form);
         $this->assertTrue($client->getResponse()->isRedirect('/users'));
-        $client->followRedirect();
+        $user = $this->getUser($this->entityManager, 'editedUser');
+        $this->assertNotNull($user);
 
-        $crawler = $client->request('GET', '/users/' . $user->getId() . '/edit');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
-
-        //checking we have the username in bold for editing
-        $this->assertSelectorTextContains('html div>h1',
-            'Modifier');
-        $this->assertSelectorTextContains('html div>h1>strong',
-            'editedUser');
-
+        $this->assertEquals('user1@localhost.com', $user->getEmail());
     }
 
     //log in as a user and update our password
