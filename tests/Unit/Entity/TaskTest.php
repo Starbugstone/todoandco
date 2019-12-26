@@ -3,6 +3,7 @@
 namespace App\Tests\unit;
 
 use App\Entity\Task;
+use App\Entity\User;
 use PHPUnit\Framework\TestCase;
 
 class TaskTest extends TestCase
@@ -34,5 +35,15 @@ class TaskTest extends TestCase
         $this->assertTrue($task->getIsDone());
         $this->assertTrue($task->isDone());
         $this->assertFalse($task->toggleIsDone());
+
+        //testing the task / user relationship
+        $user = new User();
+        $user->setUsername('TestUser1');
+
+        $this->assertNull($task->getUser());
+        $task->setUser($user);
+        $this->assertEquals($user, $task->getUser());
+        $task->setUser(null);
+        $this->assertNull($task->getUser());
     }
 }

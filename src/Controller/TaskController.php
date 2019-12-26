@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class TaskController extends AbstractController
 {
@@ -34,9 +35,10 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/create", name="task_create")
      */
-    public function createAction(Request $request): Response
+    public function createAction(Request $request, UserInterface $user): Response
     {
         $task = new Task();
+        $task->setUser($user);
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);

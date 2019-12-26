@@ -2,6 +2,7 @@
 
 namespace App\Tests\unit;
 
+use App\Entity\Task;
 use App\Entity\User;
 use PHPUnit\Framework\TestCase;
 
@@ -25,9 +26,21 @@ class UserTest extends TestCase
         //id should be null as it is not saved to DB
         $this->assertNull($user->getId());
 
-        //testing getters and setters for the apssword. they are not encoded here so a functional test will be needed
+        //testing getters and setters for the password. they are not encoded here so a functional test will be needed
         $user->setPassword('P4ssW0rd');
         $this->assertEquals('P4ssW0rd',$user->getPassword());
+
+        //testing the task / user relationship
+        $task = new Task();
+        $task->setTitle('TestTask1');
+        $task->setContent('TestTask1Content');
+        //Adding and removing the task from user
+        $user->addTask($task);
+        $this->assertCount(1,$user->getTasks());
+        $this->assertEquals($task, $user->getTasks()[0]);
+        $user->removeTask($task);
+        $this->assertCount(0,$user->getTasks());
+
 
         //these methods are not used so they don't return anything
         $this->assertNull($user->getSalt());
