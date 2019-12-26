@@ -40,12 +40,14 @@ RUN set -eux; \
 	; \
 	pecl install \
 		apcu-${APCU_VERSION} \
+		xdebug \
 	; \
 	pecl clear-cache; \
 	docker-php-ext-enable \
 		apcu \
 		opcache \
 		pdo_mysql \
+		xdebug \
 	; \
 	\
 	runDeps="$( \
@@ -91,7 +93,7 @@ RUN set -eux; \
 COPY .env ./
 RUN composer dump-env prod;
 #	rm .env
-COPY .env.test ./
+COPY .env.test phpunit.xml.dist ./
 
 # copy only specifically what we need
 COPY bin bin/
@@ -110,6 +112,7 @@ RUN set -eux; \
 	composer dump-autoload --classmap-authoritative --no-dev;
 #RUN	composer run-script --no-dev post-install-cmd;
 RUN	chmod +x bin/console; sync
+RUN	chmod +x bin/phpunit; sync
 
 VOLUME /srv/app/var
 

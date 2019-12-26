@@ -1,0 +1,19 @@
+language: php
+php:
+  - '7.3'
+services:
+  - docker
+
+install:
+  - docker-compose -f docker-compose.yml -f docker-compose-test.yml build
+  - docker-compose -f docker-compose.yml -f docker-compose-test.yml up -d
+  - sleep 15 #Wait for all the containers to start
+
+before_script:
+  - docker-compose -f docker-compose.yml -f docker-compose-test.yml exec php bin/console doctrine:fixtures:load -n
+
+script:
+  - docker-compose -f docker-compose.yml -f docker-compose-test.yml exec php bin/phpunit
+
+after_script:
+  - docker-compose down

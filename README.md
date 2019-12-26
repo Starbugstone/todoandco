@@ -1,6 +1,13 @@
 ToDoList
 ========
 
+[![Build Status](https://travis-ci.com/Starbugstone/todoandco.svg?branch=master)](https://travis-ci.com/Starbugstone/todoandco)
+
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Starbugstone/todoandco/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Starbugstone/todoandco/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/Starbugstone/todoandco/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Starbugstone/todoandco/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/Starbugstone/todoandco/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Starbugstone/todoandco/build-status/master)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/Starbugstone/todoandco/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
+
 Base du projet #8 : Améliorez un projet existant
 
 https://openclassrooms.com/projects/ameliorer-un-projet-existant-1
@@ -14,6 +21,11 @@ Steps taken
  - Making our initial migrations : bin/console doctrine:migrations:diff
  - Applying our migrations : bin/console doctrine:migrations:migrate
  - Adding Blackfire : need to create a blackfire-variables.env
- - BLACKFIRE_SERVER_ID=xxx
- - BLACKFIRE_SERVER_TOKEN=xxx 
+   - BLACKFIRE_SERVER_ID=xxx
+   - BLACKFIRE_SERVER_TOKEN=xxx
+ - Adding fixtures and test utilities
 ---------------------
+
+docker-compose exec php bin/console doctrine:fixtures:load -n
+
+docker-compose exec php bin/phpunit --coverage-html=coverage/
