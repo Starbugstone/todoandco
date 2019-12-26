@@ -1,6 +1,11 @@
 ToDoList
 ========
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Starbugstone/todoandco/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Starbugstone/todoandco/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/Starbugstone/todoandco/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Starbugstone/todoandco/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/Starbugstone/todoandco/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Starbugstone/todoandco/build-status/master)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/Starbugstone/todoandco/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
+
 Base du projet #8 : Améliorez un projet existant
 
 https://openclassrooms.com/projects/ameliorer-un-projet-existant-1
