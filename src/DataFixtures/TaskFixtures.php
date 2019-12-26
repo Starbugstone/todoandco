@@ -21,13 +21,13 @@ class TaskFixtures extends Fixture
 
         $manager->persist($task);
 
-        for($i=0; $i<10; $i++){
+        for ($i = 0; $i < 10; $i++) {
             $task = new Task();
 
             $task
                 ->setCreatedAt($faker->dateTimeThisDecade())
-                ->setTitle($faker->words(rand(1,5), true))
-                ->setContent($faker->paragraph(rand(3,20)))
+                ->setTitle($faker->words(rand(1, 5), true))
+                ->setContent($faker->paragraph(rand(3, 20)))
                 ->setIsDone($faker->boolean($chanceOfGettingTrue = 50));
 
             $manager->persist($task);
