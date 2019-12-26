@@ -55,7 +55,7 @@
         <div class="col-md-12">
             {% for flash_message in app.session.flashBag.get('success') %}
                 <div class="alert alert-success" role="alert">
-                    <strong>Superbe !</strong> {{ flash_message }}
+                    <p><strong>Superbe !</strong> {{ flash_message }}</p>
                 </div>
             {% endfor %}
 

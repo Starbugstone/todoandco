@@ -3,6 +3,7 @@ version: '3.4'
 services:
     php:
         image: starbugstone/todoandco-php:develop
+        container_name: todoandco_php
         build:
             context: ./
             target: app_php
