@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserFixtures extends Fixture
 {
-
+    public const TASK_USER_REFERENCE = 'task-user';
     /**
      * @var UserPasswordEncoderInterface
      */
@@ -33,6 +33,7 @@ class UserFixtures extends Fixture
 
         $manager->persist($user);
 
+        //variable random users
         for ($i = 0; $i < 10; $i++) {
             $user = new User();
             $encoded = $this->passwordEncoder->encodePassword($user, 'password');
@@ -44,6 +45,18 @@ class UserFixtures extends Fixture
             $manager->persist($user);
         }
 
+        //user that will have tasks
+        $taskUser = new User();
+        $encoded = $this->passwordEncoder->encodePassword($taskUser, 'password');
+        $taskUser
+            ->setUserName('taskuser')
+            ->setPassword($encoded)
+            ->setEmail('taskuser@localhost.com');
+
+        $manager->persist($taskUser);
+
         $manager->flush();
+
+        $this->addReference(self::TASK_USER_REFERENCE, $taskUser);
     }
 }
