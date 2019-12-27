@@ -2,6 +2,7 @@
 
 namespace App\Tests\Unit\EventListener;
 
+use App\Entity\AnonymousUser;
 use App\Entity\Task;
 use App\Entity\User;
 use App\EventListener\AddUserToNewTask;
@@ -59,7 +60,7 @@ class AddUserToNewTaskTest extends TestCase
         $addUserToNewTask = new AddUserToNewTask($tokenStorageMock, $loggerInterfaceMock);
 
         $addUserToNewTask->PrePersist($task);
-        $this->assertEquals('Anonymous', $task->getUser()->getUsername());
+        $this->assertEquals(AnonymousUser::ANONYMOUS_USERNAME, $task->getUser()->getUsername());
     }
 
     public function testAddNewUserToTaskBadUser()
@@ -83,6 +84,6 @@ class AddUserToNewTaskTest extends TestCase
         $addUserToNewTask = new AddUserToNewTask($tokenStorageMock, $loggerInterfaceMock);
 
         $addUserToNewTask->PrePersist($task);
-        $this->assertEquals('Anonymous', $task->getUser()->getUsername());
+        $this->assertEquals(AnonymousUser::ANONYMOUS_USERNAME, $task->getUser()->getUsername());
     }
 }

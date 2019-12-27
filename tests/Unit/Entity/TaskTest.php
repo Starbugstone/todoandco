@@ -2,6 +2,7 @@
 
 namespace App\Tests\Unit\Entity;
 
+use App\Entity\AnonymousUser;
 use App\Entity\Task;
 use App\Entity\User;
 use PHPUnit\Framework\TestCase;
@@ -41,10 +42,10 @@ class TaskTest extends TestCase
         $user->setUsername('TestUser1');
 
         //if no user we should return an anonymous user
-        $this->assertEquals('Anonymous', $task->getUser()->getUsername());
+        $this->assertEquals(AnonymousUser::ANONYMOUS_USERNAME, $task->getUser()->getUsername());
         $task->setUser($user);
         $this->assertEquals($user, $task->getUser());
         $task->setUser(null);
-        $this->assertEquals('Anonymous', $task->getUser()->getUsername());
+        $this->assertEquals(AnonymousUser::ANONYMOUS_USERNAME, $task->getUser()->getUsername());
     }
 }

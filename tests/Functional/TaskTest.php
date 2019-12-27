@@ -4,6 +4,7 @@
 namespace App\Tests\Functional;
 
 
+use App\Entity\AnonymousUser;
 use App\Entity\Task;
 use DAMA\DoctrineTestBundle\Doctrine\Cache\StaticArrayCache;
 use DAMA\DoctrineTestBundle\Doctrine\DBAL\StaticDriver;
@@ -96,7 +97,7 @@ class TaskTest extends WebTestCase
         //we have not touched the is done.
         $this->assertFalse($task2->isDone(), 'The Task IsDone is no longer false after edit');
         //we have not updated the user so it should return anonymous
-        $this->assertEquals('Anonymous', $task2->getUser()->getUsername(), 'the user has been updated after edit and is no longer anonymous');
+        $this->assertEquals(AnonymousUser::ANONYMOUS_USERNAME, $task2->getUser()->getUsername(), 'the user has been updated after edit and is no longer anonymous');
 
         //check if we are displaying the correct information when going back to edit
         $form = $crawler->selectButton('Modifier')->form();
