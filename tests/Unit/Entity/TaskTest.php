@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\unit;
+namespace App\Tests\Unit\Entity;
 
 use App\Entity\Task;
 use App\Entity\User;
@@ -40,10 +40,11 @@ class TaskTest extends TestCase
         $user = new User();
         $user->setUsername('TestUser1');
 
-        $this->assertNull($task->getUser());
+        //if no user we should return an anonymous user
+        $this->assertEquals('Anonymous', $task->getUser()->getUsername());
         $task->setUser($user);
         $this->assertEquals($user, $task->getUser());
         $task->setUser(null);
-        $this->assertNull($task->getUser());
+        $this->assertEquals('Anonymous', $task->getUser()->getUsername());
     }
 }

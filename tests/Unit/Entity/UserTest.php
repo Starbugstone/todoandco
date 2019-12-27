@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\unit;
+namespace App\Tests\Unit\Entity;
 
 use App\Entity\Task;
 use App\Entity\User;

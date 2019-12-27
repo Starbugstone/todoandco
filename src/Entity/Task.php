@@ -114,8 +114,13 @@ class Task
         return $this->isDone;
     }
 
-    public function getUser(): ?User
+    public function getUser(): User
     {
+        if($this->User === null){
+            $anonymousUser = new User();
+            $anonymousUser->setUsername('Anonymous');
+            return $anonymousUser;
+        }
         return $this->User;
     }
 
