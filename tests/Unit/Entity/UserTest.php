@@ -60,6 +60,7 @@ class UserTest extends TestCase
         $this->assertEquals($user, $task->getUser());
 
         $user->removeTask($task);
+        $this->assertNotEquals($user, $task->getUser());
         $this->assertEquals(AnonymousUser::ANONYMOUS_USERNAME,$task->getUser()->getUsername());
     }
 
