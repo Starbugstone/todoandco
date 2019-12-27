@@ -48,7 +48,7 @@ class User implements UserInterface
     private $email;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Task", mappedBy="User")
+     * @ORM\OneToMany(targetEntity="App\Entity\Task", mappedBy="User", cascade={"remove"})
      */
     private $tasks;
 
