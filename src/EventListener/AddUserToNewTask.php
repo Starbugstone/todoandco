@@ -19,16 +19,20 @@ class AddUserToNewTask
 
     public function __construct(TokenStorageInterface $tokenStorage)
     {
-        $user = $tokenStorage->getToken()->getUser();
-        $this->user = $user;
+        $token = $tokenStorage->getToken();
+        if($token){
+            $user = $token->getUser();
+            $this->user = $user;
+        }
+
     }
 
     //add the logged on user to the task on creation
     public function PrePersist(Task $task, LifecycleEventArgs $event)
     {
-        if ($this->user === null){
-            throw new \Exception('registering a task with an anonymous user');
-        }
+//        if ($this->user === null){
+//            throw new \Exception('registering a task with an anonymous user');
+//        }
         $task->setUser($this->user);
     }
 }

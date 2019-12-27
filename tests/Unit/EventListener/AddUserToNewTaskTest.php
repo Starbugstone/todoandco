@@ -37,25 +37,25 @@ class AddUserToNewTaskTest extends TestCase
 
     }
 
-    public function testAddNewUserToTaskError()
-    {
-        $task = new Task();
-
-        $tokenStorageMock = $this->createMock(TokenStorageInterface::class);
-        $tokenInterfaceMock = $this->createMock(TokenInterface::class);
-        $lifeCycleEventArgsMock = $this->createMock(LifecycleEventArgs::class);
-        $tokenStorageMock->expects($this->once())
-            ->method('getToken')
-            ->willReturn($tokenInterfaceMock);
-        $tokenInterfaceMock->expects($this->once())
-            ->method('getUser')
-            ->willReturn(null);
-
-        $addUserToNewTask = new AddUserToNewTask($tokenStorageMock);
-
-        $this->expectException(\Exception::class);
-        $addUserToNewTask->PrePersist($task, $lifeCycleEventArgsMock);
-
-
-    }
+//    public function testAddNewUserToTaskError()
+//    {
+//        $task = new Task();
+//
+//        $tokenStorageMock = $this->createMock(TokenStorageInterface::class);
+//        $tokenInterfaceMock = $this->createMock(TokenInterface::class);
+//        $lifeCycleEventArgsMock = $this->createMock(LifecycleEventArgs::class);
+//        $tokenStorageMock->expects($this->once())
+//            ->method('getToken')
+//            ->willReturn($tokenInterfaceMock);
+//        $tokenInterfaceMock->expects($this->once())
+//            ->method('getUser')
+//            ->willReturn(null);
+//
+//        $addUserToNewTask = new AddUserToNewTask($tokenStorageMock);
+//
+//        $this->expectException(\Exception::class);
+//        $addUserToNewTask->PrePersist($task, $lifeCycleEventArgsMock);
+//
+//
+//    }
 }
