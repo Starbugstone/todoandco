@@ -99,18 +99,12 @@ COPY config config/
 COPY public public/
 COPY src src/
 COPY templates templates/
-#COPY tests tests/
-
-#adding extra folders for old version of symfony
-#COPY app app/
-#COPY web web/
 
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
 	composer dump-autoload --classmap-authoritative --no-dev;
 #RUN	composer run-script --no-dev post-install-cmd;
 RUN	chmod +x bin/console; sync
-RUN	chmod +x bin/phpunit; sync
 
 VOLUME /srv/app/var
 
