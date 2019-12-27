@@ -176,4 +176,12 @@ class UserCrudTest extends WebTestCase
         $form['user[email]'] = $mail;
         return $form;
     }
+
+    private function getUserFromIdViaDQL(int $id): ?User
+    {
+        //have to run a DQL command to actualy bypass the cache
+        $this->entityManager->clear();
+        $query = $this->entityManager->createQuery('SELECT U FROM App\Entity\User U WHERE U.id like :id')->setParameter('id', $id);
+        return $query->getResult()[0];
+    }
 }

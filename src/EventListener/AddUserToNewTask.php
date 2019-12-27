@@ -12,27 +12,30 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class AddUserToNewTask
 {
 
+
     /**
-     * @var User $user
+     * @var TokenStorageInterface
      */
-    private $user;
+    private $tokenStorage;
 
     public function __construct(TokenStorageInterface $tokenStorage)
     {
-        $token = $tokenStorage->getToken();
-        if($token){
-            $user = $token->getUser();
-            $this->user = $user;
-        }
-
+        $this->tokenStorage = $tokenStorage;
     }
 
     //add the logged on user to the task on creation
-    public function PrePersist(Task $task, LifecycleEventArgs $event)
+    public function PrePersist(Task $task)
     {
-//        if ($this->user === null){
-//            throw new \Exception('registering a task with an anonymous user');
-//        }
-        $task->setUser($this->user);
+        $token = $this->tokenStorage->getToken();
+        if (!$token) {
+            return;
+        }
+
+        $user = $token->getUser();
+        if(!$user instanceof User){
+            return;
+        }
+
+        $task->setUser($user);
     }
 }
