@@ -50,9 +50,6 @@ class AddUserToNewTaskTest extends TestCase
 
         $tokenStorageMock->expects($this->once())
             ->method('getToken')
-            ->willReturn($tokenInterfaceMock);
-        $tokenInterfaceMock->expects($this->once())
-            ->method('getUser')
             ->willReturn(null);
         $loggerInterfaceMock->expects($this->once())
             ->method('error');
