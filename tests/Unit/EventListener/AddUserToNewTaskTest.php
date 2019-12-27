@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\EventListener\AddUserToNewTask;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
@@ -22,6 +23,7 @@ class AddUserToNewTaskTest extends TestCase
 
         $tokenStorageMock = $this->createMock(TokenStorageInterface::class);
         $tokenInterfaceMock = $this->createMock(TokenInterface::class);
+        $loggerInterfaceMock = $this->createMock(LoggerInterface::class);
 
         $tokenStorageMock->expects($this->once())
             ->method('getToken')
@@ -30,7 +32,7 @@ class AddUserToNewTaskTest extends TestCase
             ->method('getUser')
             ->willReturn($user);
 
-        $addUserToNewTask = new AddUserToNewTask($tokenStorageMock);
+        $addUserToNewTask = new AddUserToNewTask($tokenStorageMock, $loggerInterfaceMock);
 
         $addUserToNewTask->PrePersist($task);
         $this->assertEquals($user, $task->getUser());
@@ -43,6 +45,7 @@ class AddUserToNewTaskTest extends TestCase
 
         $tokenStorageMock = $this->createMock(TokenStorageInterface::class);
         $tokenInterfaceMock = $this->createMock(TokenInterface::class);
+        $loggerInterfaceMock = $this->createMock(LoggerInterface::class);
 
         $tokenStorageMock->expects($this->once())
             ->method('getToken')
@@ -50,8 +53,10 @@ class AddUserToNewTaskTest extends TestCase
         $tokenInterfaceMock->expects($this->once())
             ->method('getUser')
             ->willReturn(null);
+        $loggerInterfaceMock->expects($this->once())
+            ->method('error');
 
-        $addUserToNewTask = new AddUserToNewTask($tokenStorageMock);
+        $addUserToNewTask = new AddUserToNewTask($tokenStorageMock, $loggerInterfaceMock);
 
         $addUserToNewTask->PrePersist($task);
         $this->assertEquals('Anonymous', $task->getUser()->getUsername());
@@ -64,6 +69,7 @@ class AddUserToNewTaskTest extends TestCase
 
         $tokenStorageMock = $this->createMock(TokenStorageInterface::class);
         $tokenInterfaceMock = $this->createMock(TokenInterface::class);
+        $loggerInterfaceMock = $this->createMock(LoggerInterface::class);
 
         $tokenStorageMock->expects($this->once())
             ->method('getToken')
@@ -71,8 +77,10 @@ class AddUserToNewTaskTest extends TestCase
         $tokenInterfaceMock->expects($this->once())
             ->method('getUser')
             ->willReturn($user);
+        $loggerInterfaceMock->expects($this->once())
+            ->method('error');
 
-        $addUserToNewTask = new AddUserToNewTask($tokenStorageMock);
+        $addUserToNewTask = new AddUserToNewTask($tokenStorageMock, $loggerInterfaceMock);
 
         $addUserToNewTask->PrePersist($task);
         $this->assertEquals('Anonymous', $task->getUser()->getUsername());
