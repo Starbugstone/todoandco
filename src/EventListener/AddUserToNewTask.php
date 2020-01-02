@@ -39,7 +39,7 @@ class AddUserToNewTask
         }
 
         $user = $token->getUser();
-        if(!$user instanceof User){
+        if (!$user instanceof User) {
             $this->logger->error('Task created but the user returned was not of type user');
             return;
         }
