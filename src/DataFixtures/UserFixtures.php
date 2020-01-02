@@ -38,9 +38,9 @@ class UserFixtures extends Fixture
             $user = new User();
             $encoded = $this->passwordEncoder->encodePassword($user, 'password');
             $user
-                ->setUserName('user' . $i)
+                ->setUserName('user'.$i)
                 ->setPassword($encoded)
-                ->setEmail('user' . $i . '@localhost.com');
+                ->setEmail('user'.$i.'@localhost.com');
 
             $manager->persist($user);
         }
