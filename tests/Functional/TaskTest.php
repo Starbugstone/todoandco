@@ -134,10 +134,11 @@ class TaskTest extends WebTestCase
         $this->assertFalse($taskNotDone->isDone(),'the task has not toggled to not finished in the database');
     }
 
-    public function testDeleteTask()
+    //TODO: update the test for user and admin + error test for non user
+    public function testDeleteTaskAsAdmin()
     {
         $client = static::createClient();
-        $client = $this->loginClient($client);
+        $client = $this->loginAdmin($client);
         $task = $this->getTask($this->entityManager);
 
         //delete the task and check the flash message
