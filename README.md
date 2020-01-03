@@ -26,6 +26,9 @@ Steps taken
    - BLACKFIRE_SERVER_ID=xxx
    - BLACKFIRE_SERVER_TOKEN=xxx
  - Adding fixtures and test utilities
+ - making the tasks attached to a user
+ - Adding user roles to the edit form
+ - Allowing only the self user and the admin modify profile
 ---------------------
 
 docker-compose exec php bin/console doctrine:fixtures:load -n
