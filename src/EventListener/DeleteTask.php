@@ -44,7 +44,7 @@ class DeleteTask
             throw new \Exception('impossible to delete task, your login is incorrect');
         }
 
-        //TODO: seperate this of to make it more readable
+        //TODO: separate this if to make it more readable
         //only self users can delete there tasks and only admins can delete anonymous tasks
         if (!($task->getUser() === $user || ($task->getUser() instanceof AnonymousUser && $user->isAdmin()))) {
             throw new \Exception('You are no allowed to delete the task');
