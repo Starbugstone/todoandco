@@ -135,7 +135,6 @@ class TaskTest extends WebTestCase
         $this->assertFalse($taskNotDone->isDone(),'the task has not toggled to not finished in the database');
     }
 
-    //TODO: update the test for user and admin + error test for non user
     public function testDeleteAnonymousTaskAsAdmin()
     {
         $client = static::createClient();
