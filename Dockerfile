@@ -15,6 +15,7 @@ WORKDIR /app
 COPY . ./
 RUN sh -c "yarn install";
 RUN sh -c "yarn add @symfony/webpack-encore";
+RUN sh -c "yarn add sass-loader@^7.0.1 node-sass";
 RUN sh -c "yarn encore production";
 
 
