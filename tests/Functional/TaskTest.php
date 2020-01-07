@@ -10,6 +10,7 @@ use DAMA\DoctrineTestBundle\Doctrine\Cache\StaticArrayCache;
 use DAMA\DoctrineTestBundle\Doctrine\DBAL\StaticDriver;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class TaskTest extends WebTestCase
 {
@@ -134,10 +135,10 @@ class TaskTest extends WebTestCase
         $this->assertFalse($taskNotDone->isDone(),'the task has not toggled to not finished in the database');
     }
 
-    public function testDeleteTask()
+    public function testDeleteAnonymousTaskAsAdmin()
     {
         $client = static::createClient();
-        $client = $this->loginClient($client);
+        $client = $this->loginAdmin($client);
         $task = $this->getTask($this->entityManager);
 
         //delete the task and check the flash message
@@ -148,6 +149,56 @@ class TaskTest extends WebTestCase
 
         //make sure that the task is no longer in DB
         $task = $this->entityManager->getRepository(Task::class)->findOneBy(['title' => HelperConstants::TEST_TASK]);
+        $this->assertNull($task, 'The deleted task is still in the database');
+    }
+
+    public function testDeleteAnonymousTaskAsUser()
+    {
+        $client = static::createClient();
+        $client = $this->loginClient($client);
+        $task = $this->getTask($this->entityManager);
+
+        //delete the task and check the exception
+        $crawler = $client->request('GET', '/tasks/' . $task->getId() . '/delete');
+        $this->assertEquals(403, $client->getResponse()->getStatusCode(), 'the deleted anonymous task did not respond with a 403 access denied');
+    }
+
+    public function testDeleteUserTaskAsOtherUser()
+    {
+        $client = static::createClient();
+        $client = $this->loginClient($client);
+        $task = $this->getTask($this->entityManager, HelperConstants::TEST_USERTASK_TASK);
+
+        //delete the task and check the exception
+        $crawler = $client->request('GET', '/tasks/' . $task->getId() . '/delete');
+        $this->assertEquals(403, $client->getResponse()->getStatusCode(), 'the deleted anonymous task did not respond with a 403 access denied');
+    }
+
+    public function testDeleteUserTaskAsAdmin()
+    {
+        $client = static::createClient();
+        $client = $this->loginAdmin($client);
+        $task = $this->getTask($this->entityManager, HelperConstants::TEST_USERTASK_TASK);
+
+        //delete the task and check the flash message
+        $crawler = $client->request('GET', '/tasks/' . $task->getId() . '/delete');
+        $this->assertEquals(403, $client->getResponse()->getStatusCode(), 'the deleted anonymous task did not respond with a 403 access denied');
+    }
+
+    public function testDeleteTaskAsUser()
+    {
+        $client = static::createClient();
+        $client = $this->loginClient($client, HelperConstants::TEST_USERTASK_USER, HelperConstants::TEST_USERTASK_PASSWORD);
+        $task = $this->getTask($this->entityManager, HelperConstants::TEST_USERTASK_TASK);
+
+        //delete the task and check the flash message
+        $crawler = $client->request('GET', '/tasks/' . $task->getId() . '/delete');
+        $this->assertTrue($client->getResponse()->isRedirect('/tasks'), 'Did not redirect to /tasks after task delition');
+        $crawler = $client->followRedirect();
+        $this->assertSelectorTextContains('html div.alert-success>p', 'La tâche a bien été supprimée.', 'The task deletion flash message is not correct');
+
+        //make sure that the task is no longer in DB
+        $task = $this->entityManager->getRepository(Task::class)->findOneBy(['title' => HelperConstants::TEST_USERTASK_TASK]);
         $this->assertNull($task, 'The deleted task is still in the database');
     }
 

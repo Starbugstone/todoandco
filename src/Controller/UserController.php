@@ -68,6 +68,9 @@ class UserController extends AbstractController
      */
     public function editAction(User $user, Request $request): Response
     {
+        //calling a voter, only self or admin can edit
+        $this->denyAccessUnlessGranted('editUser', $user);
+
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
