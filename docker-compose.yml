@@ -17,6 +17,7 @@ services:
             target: app_php
         depends_on:
             - db
+            - encore
 
     nginx:
         image: starbugstone/todoandco-nginx
@@ -27,3 +28,10 @@ services:
             - 80:80
         depends_on:
             - php
+
+    encore:
+        image: node:13.5-alpine
+        volumes:
+            - ./:/app
+        working_dir: /app
+        command: sh -c "yarn install && yarn encore production"

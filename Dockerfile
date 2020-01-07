@@ -6,6 +6,16 @@
 # https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
 ARG PHP_VERSION=7.3
 ARG NGINX_VERSION=1.17
+ARG NODE_VERSION=13.5
+
+# "Encore" stage
+FROM node:${NODE_VERSION}-alpine AS app_encore
+WORKDIR /app
+#Copy everthing as there are loads of dependancies, this will never be run so no real security risk but would be cleaner to just add what we need
+COPY . ./
+RUN sh -c "yarn install";
+RUN sh -c "yarn add @symfony/webpack-encore";
+RUN sh -c "yarn encore production";
 
 
 # "php" stage
@@ -99,6 +109,7 @@ COPY config config/
 COPY public public/
 COPY src src/
 COPY templates templates/
+COPY --from=app_encore /app/public/build public/build/
 
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
