@@ -46,12 +46,12 @@ class DeleteTask
         }
 
         //a user can delete his own tasks
-        if ($task->getUser() === $user){
+        if ($task->getUser() === $user) {
             return;
         }
 
         //an admin can delete anonymous tasks
-        if ($task->getUser() instanceof AnonymousUser && $user->isAdmin()){
+        if ($task->getUser() instanceof AnonymousUser && $user->isAdmin()) {
             return;
         }
 

@@ -42,9 +42,9 @@ class UserType extends AbstractType
         $user = $this->security->getUser();
 
         //add our EventListener to check if we are admin, if yes then we allow the role change
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($user){
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) use ($user){
             //if no user logged in, we are creating so just return
-            if(!$user){
+            if (!$user) {
                 return;
             }
             //if the logged in user is not admin, then do not add anything
