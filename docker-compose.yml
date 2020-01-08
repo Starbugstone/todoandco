@@ -17,7 +17,6 @@ services:
             target: app_php
         depends_on:
             - db
-            - encore
 
     nginx:
         image: starbugstone/todoandco-nginx
