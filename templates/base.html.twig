@@ -35,7 +35,6 @@
     <div class="container">
         <div class="navbar-header">
             <a class="navbar-brand" href="{{ path('homepage') }}">To Do List app</a>
-
             <img src="{{ asset('img/Logo_OpenClassrooms.png') }}" alt="OpenClassrooms"/>
         </div>
     </div>
@@ -43,8 +42,8 @@
 
 <!-- Page Content -->
 <div class="container">
-    <div class="row">
-        <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
+    <div class="row my-1">
+        <a href="{{ path('user_create') }}" class="mr-auto btn btn-primary">Créer un utilisateur</a>
 
         {% if app.user %}
             <a href="{{ path('logout') }}" class="float-right btn btn-danger">Se déconnecter</a>
@@ -74,8 +73,6 @@
                                        alt="todo list">{% endblock %}
         </div>
     </div>
-
-    <br/>
 
     <div class="row">
         <div class="col-md-12">
