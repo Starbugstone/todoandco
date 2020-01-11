@@ -34,12 +34,3 @@ services:
 
                 # set the 'lazy' option to TRUE to only instantiate listeners when they are used
                 lazy: true
-    App\EventListener\DeleteTask:
-        tags:
-            - # these are the basic options that define the entity listener
-                name: 'doctrine.orm.entity_listener'
-                event: 'preRemove'
-                entity: 'App\Entity\Task'
-
-                # set the 'lazy' option to TRUE to only instantiate listeners when they are used
-                lazy: true

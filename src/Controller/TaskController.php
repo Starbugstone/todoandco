@@ -96,6 +96,9 @@ class TaskController extends AbstractController
      */
     public function deleteTask(Task $task): Response
     {
+        //calling a voter, only self or admin can delete and only admins can delete an anonymous user task
+        $this->denyAccessUnlessGranted('deleteTask', $task);
+
         $em = $this->getDoctrine()->getManager();
         $em->remove($task);
         $em->flush();
