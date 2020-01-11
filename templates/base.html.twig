@@ -14,9 +14,13 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
 
-    <!-- Custom CSS -->
-    <link href="{{ asset('css/shop-homepage.css') }}" rel="stylesheet">
+    <!-- FontAwsom Cdn -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+          integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ="
+          crossorigin="anonymous"/>
 
+    <!-- Custom CSS -->
+    {{ encore_entry_link_tags('app') }}
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -31,7 +35,6 @@
     <div class="container">
         <div class="navbar-header">
             <a class="navbar-brand" href="{{ path('homepage') }}">To Do List app</a>
-
             <img src="{{ asset('img/Logo_OpenClassrooms.png') }}" alt="OpenClassrooms"/>
         </div>
     </div>
@@ -39,11 +42,11 @@
 
 <!-- Page Content -->
 <div class="container">
-    <div class="row">
-        <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
+    <div class="row my-1">
+        <a href="{{ path('user_create') }}" class="mr-auto btn btn-primary">Créer un utilisateur</a>
 
         {% if app.user %}
-            <a href="{{ path('logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
+            <a href="{{ path('logout') }}" class="float-right btn btn-danger">Se déconnecter</a>
         {% endif %}
 
         {% if not app.user and 'login' != app.request.attributes.get('_route') %}
@@ -71,8 +74,6 @@
         </div>
     </div>
 
-    <br/>
-
     <div class="row">
         <div class="col-md-12">
             {% block body %}{% endblock %}
@@ -87,7 +88,7 @@
     <footer>
         <div class="row">
             <div class="col-lg-12">
-                <p class="pull-right">Copyright &copy; OpenClassrooms</p>
+                <p class="float-right">Copyright &copy; OpenClassrooms</p>
             </div>
         </div>
     </footer>
@@ -103,6 +104,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+
+{{ encore_entry_script_tags('app') }}
 {% block javascripts %}
 
 {% endblock %}

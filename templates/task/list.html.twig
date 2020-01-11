@@ -3,34 +3,37 @@
 {% block header_img %}<img class="slide-image" src="{{ asset('img/todolist_content.jpg') }}" alt="todo list">{% endblock %}
 
 {% block body %}
-    <a href="{{ path('task_create') }}" class="btn btn-info pull-right">Créer une tâche</a>
+    <div class="row justify-content-end my-2">
+        <a href="{{ path('task_create') }}" class="btn btn-info">Créer une tâche</a>
+    </div>
+
     <div class="row">
         {% for task in tasks %}
-        <div class="col-sm-4 col-lg-4 col-md-4">
-            <div class="thumbnail">
-                <div class="caption">
-                    <h4 class="pull-right">
-                        {% if task.isDone %}<span class="glyphicon glyphicon-ok"></span>{% else %}<span class="glyphicon glyphicon-remove"></span>{% endif %}
+        <div class="col-md-6 col-lg-4 d-flex align-items-stretch">
+            <div class="card mb-2 w-100">
+                <div class="card-body">
+                    <h4 class="float-right">
+                        {% if task.isDone %}<i class="fas fa-check"></i>{% else %}<i class="fas fa-times"></i>{% endif %}
                     </h4>
-                    <h4><a href="{{ path('task_edit', {'id' : task.id }) }}">{{ task.title }}</a></h4>
-                    <p><small>{{ task.user.username }}</small></p>
+                    <h4 class="card-title"><a href="{{ path('task_edit', {'id' : task.id }) }}">{{ task.title }}</a></h4>
+                    <p class="font-weight-light font-italic m-0"><small>{{ task.user.username }}</small></p>
                     <p>{{ task.content }}</p>
                 </div>
                 <div>
                     <form action="{{ path('task_toggle', {'id' : task.id }) }}">
-                        <button class="btn btn-success btn-sm pull-right">
+                        <button class="btn btn-success btn-sm float-right mr-1 mb-1">
                             {% if not task.isDone %}Marquer comme faite{% else %}Marquer non terminée{% endif %}
                         </button>
                     </form>
                     <form action="{{ path('task_delete', {'id' : task.id }) }}">
-                        <button class="btn btn-danger btn-sm pull-right">Supprimer</button>
+                        <button class="btn btn-danger btn-sm float-right mr-1 mb-1">Supprimer</button>
                     </form>
                 </div>
             </div>
         </div>
         {% else %}
             <div class="alert alert-warning" role="alert">
-                Il n'y a pas encore de tâche enregistrée. <a href="{{ path('task_create') }}" class="btn btn-warning pull-right">Créer une tâche</a>
+                Il n'y a pas encore de tâche enregistrée. <a href="{{ path('task_create') }}" class="btn btn-warning float-right">Créer une tâche</a>
             </div>
         {% endfor %}
     </div>
