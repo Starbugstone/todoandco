@@ -15,10 +15,10 @@ Base du projet #8 : Améliorez un projet existant
 https://openclassrooms.com/projects/ameliorer-un-projet-existant-1
 
 ## Comment contribuer
-Voir [ici](./Contributing)
+Voir [ici](./Contributing.md)
 
 ## Contributors
-Voir [ici](./Contributors)
+Voir [ici](./Contributors.md)
 
 ## Useful information
 Be careful with the line endings., the docker-entrypoint.sh and bin/console need to be in lf and not crlf
