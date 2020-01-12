@@ -12,6 +12,7 @@ services:
         build:
             context: ./
             target: app_php
+            dockerfile: Dockerfile-dev
         environment:
             - APP_ENV=dev
         ports:
@@ -40,3 +41,11 @@ services:
             - blackfire-variables.env
         ports:
             - 8707:8707
+
+    encore:
+        image: node:13.5-alpine
+        volumes:
+            - ./:/app
+        working_dir: /app
+        command: sh -c "yarn install --production=false && yarn encore dev --watch --watch-poll --host 0.0.0.0"
+

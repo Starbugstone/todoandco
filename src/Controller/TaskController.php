@@ -26,7 +26,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks", name="task_list")
      */
-    public function listAction(): Response
+    public function list(): Response
     {
         return $this->render('task/list.html.twig', ['tasks' => $this->taskRepository->findAll()]);
     }
@@ -34,7 +34,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/create", name="task_create")
      */
-    public function createAction(Request $request): Response
+    public function create(Request $request): Response
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
@@ -58,7 +58,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/edit", name="task_edit")
      */
-    public function editAction(Task $task, Request $request): Response
+    public function edit(Task $task, Request $request): Response
     {
         $form = $this->createForm(TaskType::class, $task);
 
@@ -81,12 +81,12 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/toggle", name="task_toggle")
      */
-    public function toggleTaskAction(Task $task): Response
+    public function toggleTask(Task $task): Response
     {
         $task->toggleIsDone();
         $this->getDoctrine()->getManager()->flush();
 
-        $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme ' . ($task->isDone() ? 'fait' : 'non terminée') . '.', $task->getTitle()));
+        $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme '.($task->isDone() ? 'fait' : 'non terminée').'.', $task->getTitle()));
 
         return $this->redirectToRoute('task_list');
     }
@@ -94,8 +94,11 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/delete", name="task_delete")
      */
-    public function deleteTaskAction(Task $task): Response
+    public function deleteTask(Task $task): Response
     {
+        //calling a voter, only self or admin can delete and only admins can delete an anonymous user task
+        $this->denyAccessUnlessGranted('deleteTask', $task);
+
         $em = $this->getDoctrine()->getManager();
         $em->remove($task);
         $em->flush();

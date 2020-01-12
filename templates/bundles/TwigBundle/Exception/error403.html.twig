@@ -1,0 +1,13 @@
+{# templates/bundles/TwigBundle/Exception/error403.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="text-center mt-3">
+        <h1>Ah-ah-ah! You didn't say the magic word!</h1>
+        <p><img src="{{ asset('img/error/not-allowed.gif') }}" alt="Nedry not allowing you here"/></p>
+        <p>
+            We are sorry, you are not allowed here. <a href="{{ path('homepage') }}">return to the home page </a> and
+            try something else.
+        </p>
+    </div>
+{% endblock %}

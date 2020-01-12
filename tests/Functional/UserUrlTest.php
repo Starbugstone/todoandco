@@ -99,6 +99,7 @@ class UserUrlTest extends WebTestCase
     {
         return [
             ['/'],
+            ['/users'],
             ['/tasks'],
             ['/tasks/create'],
         ];
@@ -107,7 +108,6 @@ class UserUrlTest extends WebTestCase
     public function provideNonAuthUrls()
     {
         return [
-            ['/users'],
             ['/users/create'],
         ];
     }

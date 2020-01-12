@@ -7,6 +7,7 @@ services:
         build:
             context: ./
             target: app_php
+            dockerfile: Dockerfile-dev
         environment:
             - APP_ENV=test
 

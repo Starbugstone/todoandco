@@ -6,6 +6,17 @@
 # https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
 ARG PHP_VERSION=7.3
 ARG NGINX_VERSION=1.17
+ARG NODE_VERSION=13.5
+
+# "Encore" stage
+FROM node:${NODE_VERSION}-alpine AS app_encore
+WORKDIR /app
+#Copy everthing as there are loads of dependancies, this will never be run so no real security risk but would be cleaner to just add what we need
+COPY . ./
+RUN sh -c "yarn install";
+RUN sh -c "yarn add @symfony/webpack-encore";
+RUN sh -c "yarn add sass-loader@^7.0.1 node-sass";
+RUN sh -c "yarn encore production";
 
 
 # "php" stage
@@ -40,14 +51,12 @@ RUN set -eux; \
 	; \
 	pecl install \
 		apcu-${APCU_VERSION} \
-		xdebug \
 	; \
 	pecl clear-cache; \
 	docker-php-ext-enable \
 		apcu \
 		opcache \
 		pdo_mysql \
-		xdebug \
 	; \
 	\
 	runDeps="$( \
@@ -91,9 +100,9 @@ RUN set -eux; \
 
 # do not use .env files in production
 COPY .env ./
-RUN composer dump-env prod;
-#	rm .env
-COPY .env.test phpunit.xml.dist ./
+RUN composer dump-env prod; \
+	rm .env
+#COPY .env.test phpunit.xml.dist ./
 
 # copy only specifically what we need
 COPY bin bin/
@@ -101,35 +110,18 @@ COPY config config/
 COPY public public/
 COPY src src/
 COPY templates templates/
-COPY tests tests/
-
-#adding extra folders for old version of symfony
-#COPY app app/
-#COPY web web/
+COPY --from=app_encore /app/public/build public/build/
 
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
 	composer dump-autoload --classmap-authoritative --no-dev;
 #RUN	composer run-script --no-dev post-install-cmd;
 RUN	chmod +x bin/console; sync
-RUN	chmod +x bin/phpunit; sync
 
 VOLUME /srv/app/var
 
 COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
-
-#Adding BlackFire
-RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
-    && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/alpine/amd64/$version \
-    && mkdir -p /tmp/blackfire \
-    && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp/blackfire \
-    && mv /tmp/blackfire/blackfire-*.so $(php -r "echo ini_get ('extension_dir');")/blackfire.so \
-    && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/blackfire.ini \
-    && rm -rf /tmp/blackfire /tmp/blackfire-probe.tar.gz
-
-# Please note that the Blackfire Probe is dependent on the session module.
-# If it isn't present in your install, you will need to enable it yourself.
 
 ENTRYPOINT ["docker-entrypoint"]
 CMD ["php-fpm"]

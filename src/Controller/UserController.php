@@ -32,7 +32,7 @@ class UserController extends AbstractController
     /**
      * @Route("/users", name="user_list")
      */
-    public function listAction(): Response
+    public function list(): Response
     {
         return $this->render('user/list.html.twig', ['users' => $this->userRepository->findAll()]);
     }
@@ -40,7 +40,7 @@ class UserController extends AbstractController
     /**
      * @Route("/users/create", name="user_create")
      */
-    public function createAction(Request $request): Response
+    public function create(Request $request): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -49,7 +49,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $password = $this->encoder->encodePassword($user, $user->getPassword());
+            $password = $this->encoder->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
 
             $em->persist($user);
@@ -66,16 +66,20 @@ class UserController extends AbstractController
     /**
      * @Route("/users/{id}/edit", name="user_edit")
      */
-    public function editAction(User $user, Request $request): Response
+    public function edit(User $user, Request $request): Response
     {
+        //calling a voter, only self or admin can edit
+        $this->denyAccessUnlessGranted('editUser', $user);
+
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $this->encoder->encodePassword($user, $user->getPassword());
-            $user->setPassword($password);
-
+            if ($user->getPlainPassword() !== null) {
+                $password = $this->encoder->encodePassword($user, $user->getPlainPassword());
+                $user->setPassword($password);
+            }
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été modifié");

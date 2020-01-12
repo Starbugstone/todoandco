@@ -50,11 +50,13 @@ class UserCrudTest extends WebTestCase
         $crawler = $client->submit($form);
 
         //we should be sent back to the login form
-        $this->assertTrue($client->getResponse()->isRedirect('/login'), 'We were not redirected to the login page after a bad user form submission');
+        $this->assertTrue($client->getResponse()->isRedirect('/login'),
+            'We were not redirected to the login page after a bad user form submission');
         $crawler = $client->followRedirect();
 
         //check that we have a flash
-        $this->assertSelectorTextContains('html div.alert-danger', 'Le nom d\'utilisateur est incorrect.', 'the error flash message is incorrect');
+        $this->assertSelectorTextContains('html div.alert-danger', 'Le nom d\'utilisateur est incorrect.',
+            'the error flash message is incorrect');
 
         //connect with bad password
         $form = $crawler->selectButton('Se connecter')->form();
@@ -65,7 +67,8 @@ class UserCrudTest extends WebTestCase
         $this->assertTrue($client->getResponse()->isRedirect('/login'), 'Did not redirect to login after bad password');
         $crawler = $client->followRedirect();
 
-        $this->assertSelectorTextContains('html div.alert-danger', 'Identifiants invalides.', 'We did not get a flash message for bas password');
+        $this->assertSelectorTextContains('html div.alert-danger', 'Identifiants invalides.',
+            'We did not get a flash message for bas password');
     }
 
     //create user with errors
@@ -73,14 +76,17 @@ class UserCrudTest extends WebTestCase
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/users/create');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'The user/create page did not respond with a 200 code');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(),
+            'The user/create page did not respond with a 200 code');
 
         //check that same password
         $form = $this->userForm($crawler, 'Ajouter', 'badUser', 'pass', 'pass2', 'mail@localhost.com');
         $crawler = $client->submit($form);
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'We did not get a 200 status code after a bad user creation');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(),
+            'We did not get a 200 status code after a bad user creation');
         $this->assertSelectorTextContains('html span.form-error-message',
-            'Les deux mots de passe doivent correspondre.', 'We did not get a flash message saying thet the passwords did not match');
+            'Les deux mots de passe doivent correspondre.',
+            'We did not get a flash message saying thet the passwords did not match');
 
     }
 
@@ -89,18 +95,21 @@ class UserCrudTest extends WebTestCase
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/users/create');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'The user/create page did not respond with a 200 code');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(),
+            'The user/create page did not respond with a 200 code');
 
         $form = $this->userForm($crawler, 'Ajouter', 'goodUser', 'pass', 'pass', 'mail@localhost.com');
         $crawler = $client->submit($form);
 
-        $this->assertTrue($client->getResponse()->isRedirect('/users'), 'We were not redirected to /users after an account creation');
+        $this->assertTrue($client->getResponse()->isRedirect('/users'),
+            'We were not redirected to /users after an account creation');
         $crawler = $client->followRedirect();
 
 
         $user = $this->getUser($this->entityManager, 'goodUser');
         $this->assertNotNull($user, 'The user was not created in the DataBase');
-        $this->assertEquals('mail@localhost.com', $user->getEmail(), 'The new user email was not registered in the database');
+        $this->assertEquals('mail@localhost.com', $user->getEmail(),
+            'The new user email was not registered in the database');
     }
 
     //login as admin and edit a username
@@ -112,7 +121,8 @@ class UserCrudTest extends WebTestCase
         /** @var User $user */
         $user = $this->getUser($this->entityManager);
         $crawler = $client->request('GET', '/users/' . $user->getId() . '/edit');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), '/users/' . $user->getId() . '/edit did not respond with a 200 status code when logged in as admin');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(),
+            '/users/' . $user->getId() . '/edit did not respond with a 200 status code when logged in as admin');
 
         //checking we have the username in bold for editing
         $this->assertSelectorTextContains('html div>h1',
@@ -122,9 +132,43 @@ class UserCrudTest extends WebTestCase
 
         $form = $this->userForm($crawler, 'Modifier', 'editedUser', 'pass', 'pass', 'user1@localhost.com');
         $crawler = $client->submit($form);
-        $this->assertTrue($client->getResponse()->isRedirect('/users'), 'Not redirected to /users after editing a user as admin');
+        $this->assertTrue($client->getResponse()->isRedirect('/users'),
+            'Not redirected to /users after editing a user as admin');
         $user = $this->getUser($this->entityManager, 'editedUser');
         $this->assertNotNull($user, 'Could not find the edited user in the database');
+    }
+
+    public function testEditUserRoles()
+    {
+        $client = static::createClient();
+        $client = $this->loginAdmin($client);
+
+        /** @var User $user */
+        $user = $this->getUser($this->entityManager);
+        $crawler = $client->request('GET', '/users/' . $user->getId() . '/edit');
+        $form = $crawler->selectButton('Modifier')->form();
+
+        $this->assertEquals(HelperConstants::TEST_USER, $form['user[username]']->getValue());
+        //not admin
+        $this->assertNull($form['user[roles][0]']->getValue());
+        //is user
+        $this->assertEquals('ROLE_USER', $form['user[roles][1]']->getValue());
+
+        //make sure the database is correct
+        $originalUser = $this->getUserFromIdViaDQL($user->getId());
+        $this->assertNotContains('ROLE_ADMIN', $originalUser->getRoles());
+        $this->assertContains('ROLE_USER', $originalUser->getRoles());
+
+        //change to admin
+        $form['user[roles][0]']->tick();
+
+        $crawler = $client->submit($form);
+        $this->assertTrue($client->getResponse()->isRedirect('/users'),
+            'Not redirected to /users after editing a user as admin');
+
+        $editedUser = $this->getUserFromIdViaDQL($user->getId());
+        $this->assertContains('ROLE_ADMIN', $editedUser->getRoles());
+        $this->assertContains('ROLE_USER', $editedUser->getRoles());
     }
 
     //log in as a user and update our password
@@ -136,7 +180,8 @@ class UserCrudTest extends WebTestCase
         /** @var User $user */
         $user = $this->getUser($this->entityManager);
         $crawler = $client->request('GET', '/users/' . $user->getId() . '/edit');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), '/users/' . $user->getId() . '/edit did not respond with a 200 code when logged in as user');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(),
+            '/users/' . $user->getId() . '/edit did not respond with a 200 code when logged in as user');
 
         //checking we have the username in bold for editing
         $this->assertSelectorTextContains('html div>h1',
@@ -147,7 +192,8 @@ class UserCrudTest extends WebTestCase
         //change password
         $form = $this->userForm($crawler, 'Modifier', 'editedUser', 'pass2', 'pass2', 'user1@localhost.com');
         $crawler = $client->submit($form);
-        $this->assertTrue($client->getResponse()->isRedirect('/users'), 'did not redirect to /users after password update');
+        $this->assertTrue($client->getResponse()->isRedirect('/users'),
+            'did not redirect to /users after password update');
         $client->followRedirect();
 
         //logout and log back in with new password
@@ -156,13 +202,47 @@ class UserCrudTest extends WebTestCase
 
         //return to editing to check all is ok
         $crawler = $client->request('GET', '/users/' . $user->getId() . '/edit');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'We could not edit our user after logout and login with new password');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(),
+            'We could not edit our user after logout and login with new password');
 
         //checking we have the username in bold for editing
         $this->assertSelectorTextContains('html div>h1',
             'Modifier', 'We did not find \'Modifier\' on the edit page while logged in as user after password update');
         $this->assertSelectorTextContains('html div>h1>strong',
-            'editedUser', $user->getUsername() . ' not in bold on the edit page while logged in as user after password update');
+            'editedUser',
+            $user->getUsername() . ' not in bold on the edit page while logged in as user after password update');
+
+    }
+
+    public function testEditUserNoPasswordUpdate()
+    {
+        //login as admin
+        $client = static::createClient();
+        $client = $this->loginAdmin($client);
+
+        /** @var User $user */
+        $user = $this->getUser($this->entityManager);
+        $crawler = $client->request('GET', '/users/' . $user->getId() . '/edit');
+        $form = $crawler->selectButton('Modifier')->form();
+
+        //update userName
+        $form['user[username]'] = 'someRandomUserName1';
+        $crawler = $client->submit($form);
+        //logout
+        $crawler = $client->request('GET', '/logout');
+        $client = $this->loginClient($client, 'someRandomUserName1');
+
+        //return to editing to check all is ok
+        $crawler = $client->request('GET', '/users/' . $user->getId() . '/edit');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(),
+            'We could not edit our user after logout and login with new password');
+
+        //checking we have the username in bold for editing
+        $this->assertSelectorTextContains('html div>h1',
+            'Modifier', 'We did not find \'Modifier\' on the edit page while logged in as user after password update');
+        $this->assertSelectorTextContains('html div>h1>strong',
+            'someRandomUserName1',
+            $user->getUsername() . ' not in bold on the edit page while logged in as user after password update');
 
     }
 
@@ -171,9 +251,18 @@ class UserCrudTest extends WebTestCase
     {
         $form = $crawler->selectButton($buttonText)->form();
         $form['user[username]'] = $username;
-        $form['user[password][first]'] = $pass1;
-        $form['user[password][second]'] = $pass2;
+        $form['user[plainPassword][first]'] = $pass1;
+        $form['user[plainPassword][second]'] = $pass2;
         $form['user[email]'] = $mail;
         return $form;
+    }
+
+    private function getUserFromIdViaDQL(int $id): ?User
+    {
+        //have to run a DQL command to actualy bypass the cache
+        $this->entityManager->clear();
+        $query = $this->entityManager->createQuery('SELECT U FROM App\Entity\User U WHERE U.id like :id')->setParameter('id',
+            $id);
+        return $query->getResult()[0];
     }
 }
