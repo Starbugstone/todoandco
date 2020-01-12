@@ -27,22 +27,34 @@ class UserType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        //Set the default password options
+        $passwordOptions = array(
+            'type' => PasswordType::class,
+            'invalid_message' => 'Les deux mots de passe doivent correspondre.',
+            'required' => true,
+            'first_options' => ['label' => 'Mot de passe'],
+            'second_options' => ['label' => 'Tapez le mot de passe à nouveau'],
+            'empty_data' => '',
+        );
+
+        // If edit user : password is optional
+        // User object is stored in $options['data']
+        $recordId = $options['data']->getId();
+        if (!empty($recordId)) {
+            $passwordOptions['required'] = false;
+
+        }
+
         $builder
             ->add('username', TextType::class, ['label' => "Nom d'utilisateur"])
-            ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'invalid_message' => 'Les deux mots de passe doivent correspondre.',
-                'required' => true,
-                'first_options' => ['label' => 'Mot de passe'],
-                'second_options' => ['label' => 'Tapez le mot de passe à nouveau'],
-            ])
+            ->add('plainPassword', RepeatedType::class, $passwordOptions)
             ->add('email', EmailType::class, ['label' => 'Adresse email']);
 
         // grab the user for our event listener
         $user = $this->security->getUser();
 
         //add our EventListener to check if we are admin, if yes then we allow the role change
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) use ($user){
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($user) {
             //if no user logged in, we are creating so just return
             if (!$user) {
                 return;

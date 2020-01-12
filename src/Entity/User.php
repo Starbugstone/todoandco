@@ -51,6 +51,10 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\Task", mappedBy="User", cascade={"remove"})
      */
     private $tasks;
+    /**
+     * plain password that will be encoded. Not saved to database and only used in the forms for user management
+     */
+    private $plainPassword;
 
     public function __construct()
     {
@@ -69,7 +73,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return (string)$this->username;
     }
 
     public function setUsername(string $username): self
@@ -103,7 +107,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return (string)$this->password;
     }
 
     public function setPassword(string $password): self
@@ -127,7 +131,7 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 
     public function getEmail(): ?string
@@ -175,5 +179,23 @@ class User implements UserInterface
     public function isAdmin()
     {
         return in_array('ROLE_ADMIN', $this->getRoles());
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param mixed $plainPassword
+     * @return User
+     */
+    public function setPlainPassword($plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+        return $this;
     }
 }

@@ -148,11 +148,11 @@ class UserCrudTest extends WebTestCase
         $crawler = $client->request('GET', '/users/' . $user->getId() . '/edit');
         $form = $crawler->selectButton('Modifier')->form();
 
-        $this->assertEquals(HelperConstants::TEST_USER,$form['user[username]']->getValue());
+        $this->assertEquals(HelperConstants::TEST_USER, $form['user[username]']->getValue());
         //not admin
         $this->assertNull($form['user[roles][0]']->getValue());
         //is user
-        $this->assertEquals('ROLE_USER',$form['user[roles][1]']->getValue());
+        $this->assertEquals('ROLE_USER', $form['user[roles][1]']->getValue());
 
         //make sure the database is correct
         $originalUser = $this->getUserFromIdViaDQL($user->getId());
@@ -161,9 +161,6 @@ class UserCrudTest extends WebTestCase
 
         //change to admin
         $form['user[roles][0]']->tick();
-        //need to set the password
-        $form['user[password][first]'] = 'password';
-        $form['user[password][second]'] = 'password';
 
         $crawler = $client->submit($form);
         $this->assertTrue($client->getResponse()->isRedirect('/users'),
@@ -217,13 +214,45 @@ class UserCrudTest extends WebTestCase
 
     }
 
+    public function testEditUserNoPasswordUpdate()
+    {
+        //login as admin
+        $client = static::createClient();
+        $client = $this->loginAdmin($client);
+
+        /** @var User $user */
+        $user = $this->getUser($this->entityManager);
+        $crawler = $client->request('GET', '/users/' . $user->getId() . '/edit');
+        $form = $crawler->selectButton('Modifier')->form();
+
+        //update userName
+        $form['user[username]'] = 'someRandomUserName1';
+        $crawler = $client->submit($form);
+        //logout
+        $crawler = $client->request('GET', '/logout');
+        $client = $this->loginClient($client, 'someRandomUserName1');
+
+        //return to editing to check all is ok
+        $crawler = $client->request('GET', '/users/' . $user->getId() . '/edit');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(),
+            'We could not edit our user after logout and login with new password');
+
+        //checking we have the username in bold for editing
+        $this->assertSelectorTextContains('html div>h1',
+            'Modifier', 'We did not find \'Modifier\' on the edit page while logged in as user after password update');
+        $this->assertSelectorTextContains('html div>h1>strong',
+            'someRandomUserName1',
+            $user->getUsername() . ' not in bold on the edit page while logged in as user after password update');
+
+    }
+
 
     private function userForm(Crawler $crawler, $buttonText, $username, $pass1, $pass2, $mail)
     {
         $form = $crawler->selectButton($buttonText)->form();
         $form['user[username]'] = $username;
-        $form['user[password][first]'] = $pass1;
-        $form['user[password][second]'] = $pass2;
+        $form['user[plainPassword][first]'] = $pass1;
+        $form['user[plainPassword][second]'] = $pass2;
         $form['user[email]'] = $mail;
         return $form;
     }

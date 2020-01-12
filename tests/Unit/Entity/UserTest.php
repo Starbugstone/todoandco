@@ -31,6 +31,13 @@ class UserTest extends TestCase
         $user->setPassword('P4ssW0rd');
         $this->assertEquals('P4ssW0rd', $user->getPassword());
 
+        $user->setPlainPassword('pass123');
+        $this->assertEquals('pass123', $user->getPlainPassword());
+
+        //testing that the eraseCredentials empties plain password
+        $user->eraseCredentials();
+        $this->assertNull($user->getPlainPassword());
+
         //testing the task / user relationship
         $task = new Task();
         $task->setTitle('TestTask1');
