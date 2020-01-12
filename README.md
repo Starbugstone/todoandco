@@ -14,11 +14,17 @@ Base du projet #8 : Améliorez un projet existant
 
 https://openclassrooms.com/projects/ameliorer-un-projet-existant-1
 
+## Comment contribuer
+Voir [ici](../blob/master/Contributing)
 
+## Contributors
+Voir [ici](../blob/master/Contributors)
+
+## Useful information
 Be careful with the line endings., the docker-entrypoint.sh and bin/console need to be in lf and not crlf
 
 ---------------------
-Steps taken
+update process
  - adding migration bundle : composer require doctrine/doctrine-migrations-bundle:1.1
  - Making our initial migrations : bin/console doctrine:migrations:diff
  - Applying our migrations : bin/console doctrine:migrations:migrate
@@ -29,6 +35,8 @@ Steps taken
  - making the tasks attached to a user
  - Adding user roles to the edit form
  - Allowing only the self user and the admin modify profile
+ - allow the update of a profile without resetting password
+ - personalised error pages
 ---------------------
 
 docker-compose exec php bin/console doctrine:fixtures:load -n
