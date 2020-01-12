@@ -1,0 +1,13 @@
+{# templates/bundles/TwigBundle/Exception/error404.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="text-center mt-3">
+        <h1>Hmmm, you seam to be lost</h1>
+        <p><img src="{{ asset('img/error/lost.jpg') }}" alt="where to go next"/></p>
+        <p>
+            We are sorry, it seams you got lost. Check the page url or <a href="{{ path('homepage') }}">return to the home page </a> and
+            try something else.
+        </p>
+    </div>
+{% endblock %}

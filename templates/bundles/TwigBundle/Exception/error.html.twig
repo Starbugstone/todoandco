@@ -1,0 +1,11 @@
+{# templates/bundles/TwigBundle/Exception/error.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="text-center mt-3">
+        <h1>Oups something went very wrong</h1>
+        <p><img src="{{ asset('img/error/error.png') }}" alt="where to go next"/></p>
+        <p>Wow, something broke. be assured, we will get our best hackers onto the job.</p>
+        <p>While waiting, please <a href="{{ path('homepage') }}">return to the homepage</a> </p>
+    </div>
+{% endblock %}
