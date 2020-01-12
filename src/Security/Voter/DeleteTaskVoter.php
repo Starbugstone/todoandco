@@ -46,7 +46,7 @@ class DeleteTaskVoter extends Voter
         /* @var task $task */
         $task = $subject;
 
-        if ($user === $task->getUser()){
+        if ($user === $task->getUser()) {
             return true;
         }
 
