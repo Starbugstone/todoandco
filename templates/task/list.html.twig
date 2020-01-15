@@ -12,9 +12,9 @@
         <div class="col-md-6 col-lg-4 d-flex align-items-stretch">
             <div class="card mb-2 w-100">
                 <div class="card-body">
-                    <h4 class="float-right">
+                    <span class="float-right">
                         {% if task.isDone %}<i class="fas fa-check"></i>{% else %}<i class="fas fa-times"></i>{% endif %}
-                    </h4>
+                    </span>
                     <h4 class="card-title"><a href="{{ path('task_edit', {'id' : task.id }) }}">{{ task.title }}</a></h4>
                     <p class="font-weight-light font-italic m-0"><small>{{ task.user.username }}</small></p>
                     <p>{{ task.content }}</p>
