@@ -47,6 +47,28 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
             $manager->persist($task);
         }
 
+        $task = new Task();
+
+        $task
+            ->setCreatedAt($faker->dateTimeThisDecade())
+            ->setTitle('taskNotDone')
+            ->setContent($faker->paragraph(rand(3, 20)))
+            ->setIsDone(false)
+            ->setUser($this->getReference(UserFixtures::TASK_USER_REFERENCE));
+
+        $manager->persist($task);
+
+        $task = new Task();
+
+        $task
+            ->setCreatedAt($faker->dateTimeThisDecade())
+            ->setTitle('taskIsDone')
+            ->setContent($faker->paragraph(rand(3, 20)))
+            ->setIsDone(true)
+            ->setUser($this->getReference(UserFixtures::TASK_USER_REFERENCE));
+
+        $manager->persist($task);
+
 
         $manager->flush();
     }
