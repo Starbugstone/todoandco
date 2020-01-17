@@ -224,7 +224,7 @@ class TaskTest extends WebTestCase
         $this->assertNull($task, 'The deleted task is still in the database');
     }
 
-    public function testIsDoneTask()
+    public function testNotDoneTask()
     {
         $client = static::createClient();
         $isDoneTask = $this->getTask($this->entityManager, HelperConstants::TEST_TASK_DONE);
@@ -241,7 +241,7 @@ class TaskTest extends WebTestCase
             'The todo task is present when it should not be');
     }
 
-    public function testNotDoneTask()
+    public function testIsDoneTask()
     {
         $client = static::createClient();
         $isDoneTask = $this->getTask($this->entityManager, HelperConstants::TEST_TASK_DONE);
