@@ -1,7 +1,7 @@
 ToDoList
 ========
 
-_Version 1.1.1_
+_Version 1.1.2_
 
 [![Build Status](https://travis-ci.com/Starbugstone/todoandco.svg?branch=master)](https://travis-ci.com/Starbugstone/todoandco)
 
