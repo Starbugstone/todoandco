@@ -14,4 +14,6 @@ class HelperConstants
     const TEST_USERTASK_USER = 'taskuser';
     const TEST_USERTASK_PASSWORD = 'password';
     const TEST_USERTASK_TASK = 'task0';
+    const TEST_TASK_TODO = 'taskNotDone';
+    const TEST_TASK_DONE = 'taskIsDone';
 }
