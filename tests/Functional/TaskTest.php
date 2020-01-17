@@ -227,31 +227,35 @@ class TaskTest extends WebTestCase
     public function testIsDoneTask()
     {
         $client = static::createClient();
-        $isDoneTask = $this->getTask($this->entityManager, HelperConstants::TASK_DONE);
-        $todoTask = $this->getTask($this->entityManager, HelperConstants::TASK_TODO);
+        $isDoneTask = $this->getTask($this->entityManager, HelperConstants::TEST_TASK_DONE);
+        $todoTask = $this->getTask($this->entityManager, HelperConstants::TEST_TASK_TODO);
         $client = $this->loginClient($client, HelperConstants::TEST_USERTASK_USER,
             HelperConstants::TEST_USERTASK_PASSWORD);
         $crawler = $client->request('GET', '/tasks');
         $this->assertEquals(200, $client->getResponse()->getStatusCode(),
             'could not get the todo tasks list');
-        $this->assertSelectorTextContains('html a[href$="/tasks/'.$isDoneTask->getId().'/edit"]', HelperConstants::TASK_DONE,
+        $this->assertSelectorTextContains('html a[href$="/tasks/' . $todoTask->getId() . '/edit"]',
+            HelperConstants::TEST_TASK_TODO,
             'The default DONE task was not found');
-        $this->assertSelectorNotExists('html a[href$="/tasks/'.$todoTask->getId().'/edit"]', 'The todo task is present when it should not be');
+        $this->assertSelectorNotExists('html a[href$="/tasks/' . $isDoneTask->getId() . '/edit"]',
+            'The todo task is present when it should not be');
     }
 
     public function testNotDoneTask()
     {
         $client = static::createClient();
-        $isDoneTask = $this->getTask($this->entityManager, HelperConstants::TASK_DONE);
-        $todoTask = $this->getTask($this->entityManager, HelperConstants::TASK_TODO);
+        $isDoneTask = $this->getTask($this->entityManager, HelperConstants::TEST_TASK_DONE);
+        $todoTask = $this->getTask($this->entityManager, HelperConstants::TEST_TASK_TODO);
         $client = $this->loginClient($client, HelperConstants::TEST_USERTASK_USER,
             HelperConstants::TEST_USERTASK_PASSWORD);
         $crawler = $client->request('GET', '/tasks/done');
         $this->assertEquals(200, $client->getResponse()->getStatusCode(),
             'could not get the done tasks list');
-        $this->assertSelectorTextContains('html a[href$="/tasks/'.$todoTask->getId().'/edit"]', HelperConstants::TASK_TODO,
+        $this->assertSelectorTextContains('html a[href$="/tasks/' . $isDoneTask->getId() . '/edit"]',
+            HelperConstants::TEST_TASK_DONE,
             'The default TODO task was not found');
-        $this->assertSelectorNotExists('html a[href$="/tasks/'.$isDoneTask->getId().'/edit"]', 'The done task is present when it should not be');
+        $this->assertSelectorNotExists('html a[href$="/tasks/' . $todoTask->getId() . '/edit"]',
+            'The done task is present when it should not be');
     }
 
     private function getTaskFromIdViaDQL(int $id): ?Task
