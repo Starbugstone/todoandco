@@ -5,7 +5,7 @@ namespace App\Tests\Unit\EventListener;
 use App\Entity\AnonymousUser;
 use App\Entity\Task;
 use App\Entity\User;
-use App\EventListener\AddUserToNewTask;
+use App\EventListener\AddUserToNewTaskListener;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -33,7 +33,7 @@ class AddUserToNewTaskTest extends TestCase
             ->method('getUser')
             ->willReturn($user);
 
-        $addUserToNewTask = new AddUserToNewTask($tokenStorageMock, $loggerInterfaceMock);
+        $addUserToNewTask = new AddUserToNewTaskListener($tokenStorageMock, $loggerInterfaceMock);
 
         $addUserToNewTask->PrePersist($task);
         $this->assertEquals($user, $task->getUser());
@@ -54,7 +54,7 @@ class AddUserToNewTaskTest extends TestCase
         $loggerInterfaceMock->expects($this->once())
             ->method('error');
 
-        $addUserToNewTask = new AddUserToNewTask($tokenStorageMock, $loggerInterfaceMock);
+        $addUserToNewTask = new AddUserToNewTaskListener($tokenStorageMock, $loggerInterfaceMock);
 
         $addUserToNewTask->PrePersist($task);
         $this->assertEquals(AnonymousUser::ANONYMOUS_USERNAME, $task->getUser()->getUsername());
@@ -78,7 +78,7 @@ class AddUserToNewTaskTest extends TestCase
         $loggerInterfaceMock->expects($this->once())
             ->method('error');
 
-        $addUserToNewTask = new AddUserToNewTask($tokenStorageMock, $loggerInterfaceMock);
+        $addUserToNewTask = new AddUserToNewTaskListener($tokenStorageMock, $loggerInterfaceMock);
 
         $addUserToNewTask->PrePersist($task);
         $this->assertEquals(AnonymousUser::ANONYMOUS_USERNAME, $task->getUser()->getUsername());
