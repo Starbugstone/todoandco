@@ -63,7 +63,7 @@ class TaskTest extends WebTestCase
 
         //checking if the data is correct in database
         $task = $this->getTask($this->entityManager, 'MyTestTask');
-        $this->assertNotNull($task, 'Newley created MyTestTask is not present in the database');
+        $this->assertNotNull($task, 'Newly created MyTestTask is not present in the database');
         $this->assertEquals('lorem ipsup delor', $task->getContent(),
             'the newly created task content is not set correctly');
         $this->assertFalse($task->getIsDone(),
@@ -81,8 +81,6 @@ class TaskTest extends WebTestCase
         $crawler = $client->request('GET', '/tasks/' . $task->getId() . '/edit');
         $this->assertEquals(200, $client->getResponse()->getStatusCode(),
             '/tasks/' . $task->getId() . '/edit did not respond with a 200 status code while logged in as a user');
-
-//        StaticDriver::beginTransaction();
 
         $form = $crawler->selectButton('Modifier')->form();
         $form['task[title]'] = 'testTaskEdited';
