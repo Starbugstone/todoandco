@@ -6,11 +6,8 @@ namespace App\Tests\Functional;
 
 use App\Entity\AnonymousUser;
 use App\Entity\Task;
-use DAMA\DoctrineTestBundle\Doctrine\Cache\StaticArrayCache;
-use DAMA\DoctrineTestBundle\Doctrine\DBAL\StaticDriver;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class TaskTest extends WebTestCase
 {
