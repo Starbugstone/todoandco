@@ -17,7 +17,6 @@
                     </span>
                     <h4 class="card-title"><a href="{{ path('task_edit', {'id' : task.id }) }}">{{ task.title }}</a></h4>
                     <p class="font-weight-light font-italic m-0"><small>{{ task.user.username }}</small></p>
-{#                    <p>{{ task.content }}</p>#}
                     <p>{{ task.content|length > 50 ? task.content|slice(0, 50) ~ '...' : task.content  }}</p>
                 </div>
                 <div>
