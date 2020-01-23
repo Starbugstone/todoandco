@@ -116,7 +116,7 @@ class Task
 
     public function getUser(): User
     {
-        if ($this->User === null) {
+        if (null === $this->User) {
             return new AnonymousUser();
         }
         return $this->User;
