@@ -93,7 +93,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/toggle", name="task_toggle")
      */
-    public function toggleTask(Task $task): Response
+    public function toggleDone(Task $task): Response
     {
         $task->toggleIsDone();
         $this->getDoctrine()->getManager()->flush();
@@ -106,7 +106,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/delete", name="task_delete")
      */
-    public function deleteTask(Task $task): Response
+    public function delete(Task $task): Response
     {
         //calling a voter, only self or admin can delete and only admins can delete an anonymous user task
         $this->denyAccessUnlessGranted('deleteTask', $task);
