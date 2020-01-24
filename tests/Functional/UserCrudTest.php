@@ -228,6 +228,7 @@ class UserCrudTest extends WebTestCase
         //update userName
         $form['user[username]'] = 'someRandomUserName1';
         $crawler = $client->submit($form);
+
         //logout
         $crawler = $client->request('GET', '/logout');
         $client = $this->loginClient($client, 'someRandomUserName1');

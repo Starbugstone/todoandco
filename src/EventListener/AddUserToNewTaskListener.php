@@ -9,7 +9,7 @@ use App\Entity\User;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class AddUserToNewTask
+class AddUserToNewTaskListener
 {
 
 
