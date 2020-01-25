@@ -39,6 +39,18 @@ update process
  - personalised error pages
 ---------------------
 
-docker-compose exec php bin/console doctrine:fixtures:load -n
+To laod the project :
+Clone the project from this page
+Via command line, navigate to the folder
 
-docker-compose exec php bin/phpunit --coverage-html=coverage/
+copy docker-compose.dev.yml to docker-compose.override.yml
+
+run ```docker-compose pull``` to get the latest dev build
+
+run ```docker-compose up -d``` to run the project
+
+run ```docker-compose exec php bin/console doctrine:fixtures:load -n``` to laod the fixtures
+
+navigate to http://localhost to view the project. To login, admin and user0 with password :"password"
+
+run ```docker-compose exec php bin/phpunit --coverage-html=coverage/``` to view the code coverage
